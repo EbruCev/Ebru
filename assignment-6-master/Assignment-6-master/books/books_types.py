@@ -29,3 +29,32 @@ class Book:
 class Amazon:
     def __init__(self, bestsellers):
         self.bestsellers = bestsellers
+
+class FictionBook(Book):
+    def __init__(self, title, author, rating, reviews, price, years):
+        super().__init__(title, author, rating, reviews, price, years, self.FICTION)
+
+    def __str__(self):
+        output = ""
+        separator = ", "
+        for year in self.years:
+            if year == self.years[-1]:
+                separator = ""
+            year_list = year + separator
+        output = self.title + ":" + self.genre + "(" + year_list + ")"
+        return output
+
+
+class NonFictionBook(Book):
+    def __init__(self, title, author, rating, reviews, price, years):
+        super().__init__(title, author, rating, reviews, price, years, self.NON_FICTION)
+
+    def __str__(self):
+        output = ""
+        separator = ", "
+        for year in self.years:
+            if year == self.years[-1]:
+                separator = ""
+            year_list = year + separator
+        output = self.title + ":" + self.genre + "(" + year_list + ")"
+        return output
