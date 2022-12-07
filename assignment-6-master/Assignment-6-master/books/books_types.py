@@ -81,3 +81,35 @@ class Amazon:
             else:
                 books_dict.update({row[0]: book})
         self.bestsellers = list(books_dict.values())
+
+    def best_year_rating(self):
+        year_dict = {year: [] for year in range(2009, 2020)}
+        for book in self.bestsellers:
+            for year in book.years:
+                year_dict[year].append(book.rating)
+        for year in year_dict:
+            mean = statistics.mean(year_dict[year])
+            year_dict[year] = mean
+        higher_rating = year_dict[2009]
+        year_hr = 2009
+        for year in year_dict:
+            if higher_rating < year_dict[year]:
+                higher_rating = year_dict[year]
+                year_hr = year
+        return int(year_hr)
+
+    def best_year_reviews(self):
+        year_dict = {year: [] for year in range(2009, 2020)}
+        for book in self.bestsellers:
+            for year in book.years:
+                year_dict[year].append(book.reviews)
+        for year in year_dict:
+            mean = statistics.mean(year_dict[year])
+            year_dict[year] = mean
+        higher_reviews = year_dict[2009]
+        year_hrev = 2009
+        for year in year_dict:
+            if higher_reviews < year_dict[year]:
+                higher_reviews = year_dict[year]
+                year_hrev = year
+        return int(year_hrev)     
