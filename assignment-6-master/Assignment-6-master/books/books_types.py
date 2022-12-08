@@ -13,7 +13,10 @@ import statistics
 # TODO: Add your code to tasks 1 to 5 in this file.
 
 class Book:
-    def __init__(self, title, author, rating, reviews, price, years, genre = ""):
+    FICTION = 'Fiction'
+    NON_FICTION = 'Non Fiction'
+    recommended = False
+    def __init__(self, title, author, rating, reviews, price, years, genre):
         self.title = title
         self.author = author
         self.rating = rating
@@ -21,44 +24,46 @@ class Book:
         self.price = price
         self.years = years
         self.genre = genre
-        self.FICTION = 'Fiction'
-        self.NON_FICTION = 'Non fiction'
 
     def __str__(self):
         return self.title
 
-
+    def recommend(self, rat, num_revs):
+        if rat > self.rating or num_revs > self.reviews:
+            self.recommended = False
+        else:
+            self.recommended = True
 
 
 class FictionBook(Book):
     def __init__(self, title, author, rating, reviews, price, years):
-        super().__init__(title, author, rating, reviews, price, years)
-        self.genre = self.FICTION
+        super().__init__(title, author, rating, reviews, price, years, self.FICTION)
 
     def __str__(self):
         output = ""
         separator = ", "
+        year_list = ""
         for year in self.years:
             if year == self.years[-1]:
                 separator = ""
-            year_list = year + separator
-        output = self.title + ":" + self.genre + "(" + year_list + ")"
+            year_list += str(year) + separator
+        output = self.title + ": " + self.genre + " (" + year_list + ")"
         return output
 
 
 class NonFictionBook(Book):
     def __init__(self, title, author, rating, reviews, price, years):
-        super().__init__(title, author, rating, reviews, price, years)
-        self.genre = self.NON_FICTION
+        super().__init__(title, author, rating, reviews, price, years, self.NON_FICTION)
 
     def __str__(self):
         output = ""
         separator = ", "
+        year_list = ""
         for year in self.years:
             if year == self.years[-1]:
                 separator = ""
-            year_list = year + separator
-        output = self.title + ":" + self.genre + "(" + year_list + ")"
+            year_list += str(year) + separator
+        output = self.title + ": " + self.genre + " (" + year_list + ")"
         return output
 
 
@@ -112,4 +117,15 @@ class Amazon:
             if higher_reviews < year_dict[year]:
                 higher_reviews = year_dict[year]
                 year_hrev = year
-        return int(year_hrev)     
+        return int(year_hrev)
+
+    def recommend_book(self, rat, num_revs):
+        for i in range(0, len(self.bestsellers)):
+            self.bestsellers[i].recommend(rat, num_revs)
+
+    def get_recommendations(self):
+        recommended_list = []
+        for book in self.bestsellers:
+            if book.recommended:
+                recommended_list.append(str(book))
+        return recommended_list
